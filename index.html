@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>경선식 중학 단어 학습 및 오답 노트 (Lecture 17 & 18)</title>
+    <style>
+        /* 기본 스타일 */
+        body {
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px; /* 오답 노트 공간 확보 */
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 700px; /* 오답 노트 공간 확보 */
+            text-align: center;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #f39c12; 
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .quiz-status {
+            font-size: 1.1em;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        .word-display {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #34495e;
+            margin: 30px 0;
+            min-height: 50px;
+        }
+        input[type="text"] {
+            padding: 12px;
+            width: 80%;
+            max-width: 300px;
+            margin-bottom: 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 1.1em;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #f39c12;
+            outline: none;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #submit-btn {
+            background-color: #f39c12;
+            color: white;
+            margin-right: 10px;
+        }
+        #submit-btn:hover {
+            background-color: #e67e22;
+        }
+        #next-btn {
+            background-color: #2ecc71;
+            color: white;
+            display: none;
+        }
+        #next-btn:hover {
+            background-color: #27ae60;
+        }
+        .feedback {
+            margin-top: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            min-height: 25px;
+        }
+        .correct {
+            color: #2ecc71;
+        }
+        .wrong {
+            color: #e74c3c;
+        }
+        /* 결과 화면 및 오답 노트 스타일 */
+        .result-screen h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .result-screen p {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #f39c12;
+        }
+        .hidden {
+            display: none;
+        }
+
+        #wrong-answers {
+            margin-top: 40px;
+            text-align: left;
+            border-top: 2px solid #ecf0f1;
+            padding-top: 20px;
+        }
+        #wrong-answers h3 {
+            color: #e74c3c;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+        #wrong-answers ul {
+            list-style: none;
+            padding: 0;
+        }
+        #wrong-answers li {
+            background-color: #fde7e5;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        #wrong-answers li strong {
+            color: #c0392b; /* 오답 강조 */
+        }
+        #wrong-answers li span {
+            font-weight: bold;
+            color: #3498db; /* 정답 강조 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="quiz-screen">
+            <h1>📚 중학 단어 학습 모드</h1>
+            <p class="quiz-status" id="quiz-status">단어 로딩 중...</p>
+            <div class="word-display" id="word-display"></div>
+            
+            <input type="text" id="answer-input" placeholder="여기에 뜻을 입력해주세요.">
+            <div class="action-buttons">
+                <button id="submit-btn">정답 확인</button>
+                <button id="next-btn">다음 단어 →</button>
+            </div>
+            
+            <div class="feedback" id="feedback-message"></div>
+        </div>
+
+        <div id="result-screen" class="hidden">
+            <h2>모의 테스트가 종료되었습니다.</h2>
+            <p id="final-score"></p>
+            <button onclick="location.reload()">다시 시작</button>
+            
+            <div id="wrong-answers">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        // Lecture 17 & 18 단어 목록 (요청에 따라 업데이트)
+        const wordList = [
+// 경선식 중학 Lecture 25
+{english: "breathe", korean: "호흡하다"},
+{english: "fountain", korean: "분수"},
+{english: "drawer", korean: "서랍"},
+{english: "novel", korean: "소설"},
+{english: "suffer", korean: "괴로워하다"},
+{english: "inform", korean: "알리다"},
+{english: "prison", korean: "감옥"},
+{english: "scold", korean: "꾸짖다"},
+{english: "background", korean: "배경"},
+{english: "bank", korean: "은행, 둑"},
+{english: "pick", korean: "선택하다"},
+{english: "ever", korean: "언제나, 한 번이라도"},
+{english: "evergreen", korean: "상록수"},
+{english: "forever", korean: "영원히, 언제나"},
+{english: "suggestion", korean: "제안, 암시"},
+{english: "graduation", korean: "졸업"},
+{english: "rough", korean: "거친"},
+{english: "moment", korean: "순간, 찰나"},
+{english: "tough", korean: "거친"},
+{english: "confidence", korean: "자신감"}
+// 경선식 중학 Lecture 26
+{english: "judge", korean: "판결하다"},
+{english: "broad", korean: "광대한"},
+{english: "abroad", korean: "해외로"},
+{english: "result", korean: "결과, 성과"},
+{english: "opinion", korean: "의견"},
+{english: "whether", korean: "~인지 어떤지"},
+{english: "few", korean: "거의 없는, 소수의"},
+{english: "race", korean: "인종, 민족"},
+{english: "admire", korean: "숭배하다, 칭찬하다"},
+{english: "education", korean: "교육"},
+{english: "favor", korean: "호의"},
+{english: "conversation", korean: "대화"},
+{english: "employ", korean: "고용하다"},
+{english: "realize", korean: "깨닫다"},
+{english: "region", korean: "지역, 지방"},
+{english: "industry", korean: "산업, 근면"},
+{english: "area", korean: "지역, 범위"},
+{english: "instead", korean: "대신에"},
+{english: "borrow", korean: "빌리다"},
+{english: "produce", korean: "생산하다"},
+            ];
+        let shuffledWords = [];
+        let currentWordIndex = 0;
+        let score = 0;
+        const totalWords = wordList.length;
+        // 🚨 오답을 기록할 배열 추가
+        let wrongAnswers = []; 
+
+        const wordDisplay = document.getElementById('word-display');
+        const answerInput = document.getElementById('answer-input');
+        const submitBtn = document.getElementById('submit-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const quizStatus = document.getElementById('quiz-status');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const finalScore = document.getElementById('final-score');
+        const wrongAnswersDiv = document.getElementById('wrong-answers'); // 오답 노트 영역 DOM
+
+        // 단어 목록 섞기 함수
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function startQuiz() {
+            shuffledWords = [...wordList];
+            shuffleArray(shuffledWords);
+            currentWordIndex = 0;
+            score = 0;
+            wrongAnswers = []; // 시험 시작 시 오답 기록 초기화
+
+            quizScreen.classList.remove('hidden');
+            resultScreen.classList.add('hidden');
+            nextWord();
+        }
+
+        function nextWord() {
+            if (currentWordIndex >= totalWords) {
+                showResults();
+                return;
+            }
+
+            const currentWord = shuffledWords[currentWordIndex];
+            
+            quizStatus.textContent = `${currentWordIndex + 1}/${totalWords} 번째 단어`;
+            wordDisplay.textContent = currentWord.english;
+            answerInput.value = '';
+            feedbackMessage.textContent = '';
+            feedbackMessage.className = 'feedback';
+            
+            submitBtn.style.display = 'inline-block';
+            nextBtn.style.display = 'none';
+            answerInput.disabled = false;
+            answerInput.focus();
+        }
+
+        function checkAnswer() {
+            const currentWord = shuffledWords[currentWordIndex];
+            const userAnswer = answerInput.value.trim(); 
+            const cleanedUserAnswer = userAnswer.toLowerCase().replace(/\s/g, '').replace(/,/g, ''); // 채점용: 공백, 쉼표 제거
+
+            // 정답 목록도 공백, 쉼표 제거
+            const correctMeanings = currentWord.korean.split(',').map(m => m.trim().toLowerCase().replace(/\s/g, '').replace(/,/g, ''));
+
+            if (correctMeanings.includes(cleanedUserAnswer)) {
+                // ✅ 정답인 경우
+                feedbackMessage.textContent = `**정답입니다.**`;
+                feedbackMessage.classList.remove('wrong');
+                feedbackMessage.classList.add('correct');
+                score++;
+                
+            } else {
+                // ❌ 오답인 경우: 오답을 기록하고 답을 알려줌
+                feedbackMessage.textContent = `틀렸습니다. 정답은 '**${currentWord.korean}**' 입니다.`;
+                feedbackMessage.classList.remove('correct');
+                feedbackMessage.classList.add('wrong');
+                
+                // 🚨 오답 정보 기록 (사용자가 입력한 원본 형태 저장)
+                wrongAnswers.push({
+                    english: currentWord.english,
+                    userAnswer: answerInput.value || "(입력 안함)", 
+                    correctAnswer: currentWord.korean
+                });
+            }
+            
+            // 정답이든 오답이든 상관없이 다음으로 넘어갈 수 있게 버튼 변경
+            submitBtn.style.display = 'none';
+            nextBtn.style.display = 'inline-block';
+            answerInput.disabled = true;
+            nextBtn.focus();
+        }
+
+        // 🚨 오답 목록을 HTML에 표시하는 함수
+        function displayWrongAnswers() {
+            if (wrongAnswers.length === 0) {
+                wrongAnswersDiv.innerHTML = '<h3 style="color:#2ecc71;">🎉 모든 문제를 맞혔어!</h3>';
+                return;
+            }
+
+            let html = '<h3>틀린 단어 목록 (오답 노트)</h3><ul>';
+            
+            wrongAnswers.forEach(item => {
+                html += `
+                    <li>
+                        **${item.english}**<br>
+                        네 답: <strong>${item.userAnswer}</strong><br>
+                        정답: <span>${item.correctAnswer}</span>
+                    </li>
+                `;
+            });
+
+            html += '</ul>';
+            wrongAnswersDiv.innerHTML = html;
+        }
+
+
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            finalScore.textContent = `총 ${totalWords}개 중 ${score}개 정답! (${(score / totalWords * 100).toFixed(1)}점)`;
+            
+            // 🚨 결과 화면에 오답 노트 표시
+            displayWrongAnswers(); 
+        }
+
+        // 이벤트 리스너 설정
+        submitBtn.addEventListener('click', checkAnswer);
+        nextBtn.addEventListener('click', () => {
+            currentWordIndex++;
+            nextWord();
+        });
+        
+        // 엔터키 처리
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault(); 
+                if (submitBtn.style.display === 'inline-block') {
+                    submitBtn.click();
+                } else if (nextBtn.style.display === 'inline-block') {
+                    nextBtn.click();
+                }
+            }
+        });
+
+        // 퀴즈 시작
+        startQuiz();
+    </script>
+</body>
+</html>
