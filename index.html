@@ -216,7 +216,7 @@
         let currentWordIndex = 0;
         let score = 0;
         const totalWords = wordList.length;
-        // 🚨 오답을 기록할 배열 추가
+        // 오답 기록 배열 추가 구문
         let wrongAnswers = []; 
 
         const wordDisplay = document.getElementById('word-display');
@@ -279,19 +279,19 @@
             const correctMeanings = currentWord.korean.split(',').map(m => m.trim().toLowerCase().replace(/\s/g, '').replace(/,/g, ''));
 
             if (correctMeanings.includes(cleanedUserAnswer)) {
-                // ✅ 정답인 경우
+                // 정답인 경우
                 feedbackMessage.textContent = `**정답입니다.**`;
                 feedbackMessage.classList.remove('wrong');
                 feedbackMessage.classList.add('correct');
                 score++;
                 
             } else {
-                // ❌ 오답인 경우: 오답을 기록하고 답을 알려줌
+                // 오답인 경우: 오답을 기록하고 답을 알려줌
                 feedbackMessage.textContent = `틀렸습니다. 정답은 '**${currentWord.korean}**' 입니다.`;
                 feedbackMessage.classList.remove('correct');
                 feedbackMessage.classList.add('wrong');
                 
-                // 🚨 오답 정보 기록 (사용자가 입력한 원본 형태 저장)
+                // 오답 정보 기록 (사용자가 입력한 원본 형태 저장)
                 wrongAnswers.push({
                     english: currentWord.english,
                     userAnswer: answerInput.value || "(입력 안함)", 
@@ -306,7 +306,7 @@
             nextBtn.focus();
         }
 
-        // 🚨 오답 목록을 HTML에 표시하는 함수
+        //  오답 목록을 HTML에 표시하는 함수 이거 왜 안되냐 ㅅㅂ 어 된다 ㅅㅅ
         function displayWrongAnswers() {
             if (wrongAnswers.length === 0) {
                 wrongAnswersDiv.innerHTML = '<h3 style="color:#2ecc71;">섹스 성공함</h3>';
@@ -335,7 +335,7 @@
             resultScreen.classList.remove('hidden');
             finalScore.textContent = `총 ${totalWords}개 중 ${score}개 정답! (${(score / totalWords * 100).toFixed(1)}점)`;
             
-            // 🚨 결과 화면에 오답 노트 표시
+            //  결과 화면에 오답 노트 표시
             displayWrongAnswers(); 
         }
 
@@ -364,5 +364,6 @@
 </body>
 
 </html>
+
 
 
