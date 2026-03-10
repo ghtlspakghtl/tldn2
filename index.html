@@ -167,46 +167,57 @@
     <script>
         // 하응
         const wordList = [
-{english: "tidy", korean: "단정한"}, //
-{english: "handicap", korean: "신체장애"}, //
-{english: "device", korean: "장치"}, //
-{english: "value", korean: "가치"}, //
-{english: "profit", korean: "이익, 이득"}, //
-{english: "eyebrow", korean: "눈썹"}, //
-{english: "pot", korean: "단지, 병"}, //
-{english: "solar", korean: "태양의"}, //
-{english: "mend", korean: "수선하다, 개선하다"}, //
-{english: "connect", korean: "연결하다, 관계시키다"}, //
-{english: "connection", korean: "연결, 관계"}, //
-{english: "thermometer", korean: "온도계"}, //
-{english: "property", korean: "재산, 자산"}, //
-{english: "outline", korean: "외형, 개요"}, //
-{english: "sleeve", korean: "소매, 소맷자락"}, //
-{english: "profession", korean: "직업"}, //
-{english: "similar", korean: "비슷한, 같은 모양의"}, //
-{english: "lean", korean: "기대다, 기울다"}, //
-{english: "host", korean: "주인, 사회자"}, //
-{english: "liquid", korean: "액체의"}, //
-{english: "gym", korean: "체육관"}, //
-{english: "mist", korean: "엷은 안개, 연무"}, //
-{english: "worth", korean: "~의 가치가 있는"}, //
-{english: "root", korean: "뿌리, 근원"}, //
-{english: "route", korean: "길, 노선"}, //
-{english: "narrator", korean: "해설자"}, //
-{english: "lot", korean: "제비뽑기"}, //
-{english: "tiny", korean: "작은, 조그만한"}, //
-{english: "thread", korean: "실"}, //
-{english: "occasional", korean: "우연한, 가공의"}, //
-{english: "needle", korean: "바늘"}, //
-{english: "contain", korean: "내포하다"}, //
-{english: "hasty", korean: "서두르는, 성급한"}, //
-{english: "rather", korean: "오히려, 다소"}, //
-{english: "footprint", korean: "발자국"}, //
-{english: "intention", korean: "의도, 목적"}, //
-{english: "merchant", korean: "상인"}, //
-{english: "merchandise", korean: "상품, 제품"}, //
-{english: "scale", korean: "눈금, 규모"}, //
-{english: "intend", korean: "~할 작정이다"}, //
+{english: "freely", korean: "자유롭게"}, //
+{english: "happily", korean: "행복하게"}, //
+{english: "ever", korean: "언제나, 항상"}, //
+{english: "teenager", korean: "십 대"}, //
+{english: "way", korean: "방법"}, //
+{english: "social", korean: "사회적인"}, //
+{english: "issue", korean: "문제, 이슈"}, //
+{english: "interested", korean: "관심이 있는"}, //
+{english: "blog", korean: "블로그"}, //
+{english: "grow up", korean: "자라다, 성장하다"}, //
+{english: "dolphin", korean: "돌고래"}, //
+{english: "in danger", korean: "위험에 처한"}, //
+{english: "endangered", korean: "멸종 위기에 처한"}, //
+{english: "search", korean: "~을 검색하다, 찾다"}, //
+{english: "clean ~ up", korean: "~을 깨끗이 치우다, 청소하다"}, //
+{english: "beach", korean: "해변"}, //
+{english: "thought", korean: "생각, 고민"}, //
+{english: "get sick", korean: "병에 걸리다, 병들다"}, //
+{english: "even", korean: "~조차, 심지어"}, //
+{english: "die", korean: "죽다, 사망하다"}, //
+{english: "because of", korean: "~ 때문에"}, //
+{english: "plastic waste", korean: "플라스틱 폐기물"}, //
+{english: "waste", korean: "쓰레기"}, //
+{english: "fishing net", korean: "어망"}, //
+{english: "net", korean: "그물"}, //
+{english: "important", korean: "중요한"}, //
+{english: "cleanup", korean: "대청소"}, //
+{english: "party", korean: "일행, 모임"}, //
+{english: "take part in ~", korean: "~에 참여하다, 참석하다"}, //
+{english: "member", korean: "회원, 구성원"}, //
+{english: "aquarium", korean: "수족관"}, //
+{english: "latest", korean: "(가장) 최근의, 최신의"}, //
+{english: "return", korean: "~을 돌려보내다"}, //
+{english: "skill", korean: "기술"}, //
+{english: "survive", korean: "생존하다, 살아남다"}, //
+{english: "wild", korean: "야생, 자연"}, //
+{english: "luckily", korean: "운 좋게도, 다행히"}, //
+{english: "run an errand", korean: "심부름하다"}, //
+{english: "errand", korean: "심부름"}, //
+{english: "experience", korean: "경험"}, //
+{english: "excited", korean: "신이 난"}, //
+{english: "go back to ~", korean: "~로 돌아가다"}, //
+{english: "ceremony", korean: "의식, 행사"}, //
+{english: "quite", korean: "꽤, 상당히"}, //
+{english: "emotional", korean: "감정적인"}, //
+{english: "in fact", korean: "사실은, 실은"}, //
+{english: "anymore", korean: "더 이상"}, //
+{english: "at the same time", korean: "동시에"}, //
+{english: "hard", korean: "힘든"}, //
+{english: "shout", korean: "외치다, 소리치다"}, //
+{english: "wave", korean: "손을 흔들다"}, //
             ];
         let shuffledWords = [];
         let currentWordIndex = 0;
@@ -255,7 +266,7 @@
             const currentWord = shuffledWords[currentWordIndex];
             
             quizStatus.textContent = `${currentWordIndex + 1}/${totalWords} 번째 단어`;
-            wordDisplay.textContent = currentWord.english;
+            wordDisplay.textContent = currentWord.korean;
             answerInput.value = '';
             feedbackMessage.textContent = '';
             feedbackMessage.className = 'feedback';
@@ -272,7 +283,7 @@
             const cleanedUserAnswer = userAnswer.toLowerCase().replace(/\s/g, '').replace(/,/g, ''); // 채점용: 공백, 쉼표 제거
 
             // 정답 목록도 공백, 쉼표 제거
-            const correctMeanings = currentWord.korean.split(',').map(m => m.trim().toLowerCase().replace(/\s/g, '').replace(/,/g, ''));
+            const correctMeanings = currentWord.english.split(',').map(m => m.trim().toLowerCase().replace(/\s/g, '').replace(/,/g, ''));
 
             if (correctMeanings.includes(cleanedUserAnswer)) {
                 // 정답인 경우
@@ -283,7 +294,7 @@
                 
             } else {
                 // 오답인 경우: 오답을 기록하고 답을 알려줌
-                feedbackMessage.textContent = `틀렸습니다. 정답은 '**${currentWord.korean}**' 입니다.`;
+                feedbackMessage.textContent = `틀렸습니다. 정답은 '**${currentWord.english}**' 입니다.`;
                 feedbackMessage.classList.remove('correct');
                 feedbackMessage.classList.add('wrong');
                 
@@ -291,7 +302,7 @@
                 wrongAnswers.push({
                     english: currentWord.english,
                     userAnswer: answerInput.value || "(입력 안함)", 
-                    correctAnswer: currentWord.korean
+                    correctAnswer: currentWord.english
                 });
             }
             
@@ -360,6 +371,7 @@
 </body>
 
 </html>
+
 
 
 
